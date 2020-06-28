@@ -1,0 +1,26 @@
+const int NN = 1e7L+5; //Change NN according to limits in the question
+bitset<NN> isprime; 
+vector<int>  prime; 
+vector<int> spf(NN); 
+void seive(){ 
+    isprime.set();
+    isprime[0] = isprime[1] = 0 ;
+    spf[1]=1;
+    spf[0]=0;
+    prime.pb(2);
+    spf[2]=2;
+    for(int i=4;i<NN; i+=2){
+        isprime[i]=0;
+        spf[i]=2;
+    } 
+    for (int i=3; i<NN ; i+=2){
+        if (isprime[i]){ 
+            prime.push_back(i); 
+            spf[i] = i; 
+        } 
+        for (int j=1; j < s(prime) and i*prime[j] < NN and prime[j] <= spf[i]; ++j){ 
+            isprime[i*prime[j]]=0;  
+            spf[i*prime[j]] = prime[j]; 
+        } 
+    } 
+} 
