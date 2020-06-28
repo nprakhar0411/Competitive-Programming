@@ -1,0 +1,59 @@
+vector<vector<ll>> graph;
+vll par, dep, euler, first;
+vll seg;
+ll tme=0;
+void dfs(ll x){
+    first[x]=s(euler);
+    euler.pb(x);
+    for(auto y : graph[x]){
+        if(y!=par[x]){
+            par[y]=x;
+            dep[y]=dep[x]+1;
+            dfs(y);
+            euler.pb(x);
+        }
+    }
+}
+
+void ass(ll n){
+    graph.assign(n,{});
+    dep.assign(n,0);
+    par.assign(n,-1);
+    first.assign(n,0);
+}
+
+
+
+
+void build(ll node ,ll l, ll r){
+    if(r-l<2){
+        seg[node] = euler[l];
+        return ;
+    }
+    ll mid = (l+r)/2;
+    build(2*node,l,mid);
+    build(2*node+1,mid,r);
+    seg[node] = (dep[seg[2*node]] < dep[seg[2*node+1]]) ? seg[2*node] : seg[2*node+1];
+}
+
+ll query(ll node, ll l, ll r, ll x, ll y){
+    if(x>=r or y<=l) return -1;
+    if(l>=x and r<=y) return seg[node];
+    ll mid = (l+r)/2;
+    ll lft = query(2*node,l,mid,x,y);
+    ll rgt = query(2*node+1,mid,r,x,y);
+    if(lft==-1) return rgt;
+    if(rgt==-1) return lft;
+    return (dep[lft] < dep[rgt]) ? lft : rgt;
+}
+
+ll lca(ll u, ll v){
+    u = first[u];
+    v = first[v];
+    if(v<u) swap(u,v);
+    return query(1,0,s(euler),u,v+1);
+}
+
+/*
+    seg.assign(4*s(euler),0); // after running dfs
+*/    
